@@ -1,0 +1,72 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ModelModel } from "models/modelModel";
+
+interface AdminState {
+  isLoadingModels: boolean;
+  models: ModelModel[];
+  searchText: string;
+  count: number;
+  itemsPerPage: number;
+  page: number;
+  sort: [string, "ASC" | "DESC"][];
+  selectedModel: ModelModel | null;
+}
+
+const initialState: AdminState = {
+  isLoadingModels: false,
+  models: [],
+  searchText: "",
+  count: 0,
+  itemsPerPage: 10,
+  page: 1,
+  sort: [],
+  selectedModel: null,
+};
+
+export const adminSlice = createSlice({
+  name: "admin",
+  initialState,
+  reducers: {
+    setIsLoadingModels: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingModels = action.payload;
+    },
+    setModels: (state, action: PayloadAction<ModelModel[]>) => {
+      state.models = action.payload;
+    },
+    setModelSearchText: (state, action: PayloadAction<string>) => {
+      state.searchText = action.payload;
+      state.page = 1;
+    },
+    setModelsCount: (state, action: PayloadAction<number>) => {
+      state.count = action.payload;
+    },
+    setModelsPerPage: (state, action: PayloadAction<number>) => {
+      state.itemsPerPage = action.payload;
+    },
+    setModelsPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
+    setModelsSort: (
+      state,
+      action: PayloadAction<[string, "ASC" | "DESC"][]>
+    ) => {
+      state.sort = action.payload;
+    },
+    setSelectedModel: (state, action: PayloadAction<ModelModel | null>) => {
+      state.selectedModel = action.payload;
+    },
+  },
+});
+
+export const {
+  setIsLoadingModels,
+  setModels,
+  setModelSearchText,
+  setModelsCount,
+  setModelsPerPage,
+  setModelsPage,
+  setModelsSort,
+  setSelectedModel,
+} = adminSlice.actions;
+
+export const adminReducer = adminSlice.reducer;

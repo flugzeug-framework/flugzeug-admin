@@ -6,9 +6,12 @@ import {
 } from "features/session/sessionSelectors";
 import { Toast } from "features/toast/Toast";
 import { AccountConfirm } from "pages/AccountConfirm";
+import { Admin } from "pages/Admin/indext";
 import { ForgotPassword } from "pages/ForgotPassword";
 import { Home } from "pages/Home";
 import { Login } from "pages/Login";
+import { EntityForm } from "pages/EntityForm/indext";
+import { EntityList } from "pages/EntityList/indext";
 import { Profile } from "pages/Profile";
 import { Register } from "pages/Register";
 import { ResetPassword } from "pages/ResetPassword";
@@ -20,9 +23,12 @@ import { Route, Switch } from "react-router-dom";
 import { ProtectedRoute } from "routes/ProtectedRoute";
 import {
   accountConfirm,
+  admin,
   forgotPassword,
   home,
   login,
+  moduleForm,
+  moduleList,
   profile,
   register,
   resetPassword,
@@ -67,6 +73,17 @@ function App() {
             <ProtectedRoute component={UserForm} path={user(":id")} />
             <ProtectedRoute component={Users} exact path={users()} />
             <ProtectedRoute component={Profile} exact path={profile()} />
+            <ProtectedRoute component={Admin} exact path={admin()} />
+            <ProtectedRoute
+              component={EntityList}
+              exact
+              path={moduleList(":moduleName")}
+            />
+            <ProtectedRoute
+              component={EntityForm}
+              exact
+              path={moduleForm(":moduleName", ":id")}
+            />
           </SideMenu>
         </Switch>
       )}

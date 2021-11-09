@@ -1,4 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import { adminReducer } from "features/admin/adminSlice";
+import { entityReducer } from "features/entity/entitySlice";
 import { sessionReducer } from "features/session/sessionSlice";
 import { toastReducer } from "features/toast/toastSlice";
 import { userManagementReducer } from "features/userManagement/userManagementSlice";
@@ -10,6 +12,8 @@ export const store = configureStore({
     session: sessionReducer,
     userManagement: userManagementReducer,
     toast: toastReducer,
+    admin: adminReducer,
+    entity: entityReducer,
   },
 });
 

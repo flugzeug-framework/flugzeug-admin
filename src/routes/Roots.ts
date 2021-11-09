@@ -7,6 +7,7 @@ export const ROOT_ACCOUNT_CONFIRM = "/confirm";
 export const ROOT_REGISTER = "/register";
 export const ROOT_SETTINGS = "/settings";
 export const ROOT_USER = "/user";
+export const ROOT_ADMIN = "/admin";
 
 export const home = () => ROOT_HOME;
 export const login = () => ROOT_LOGIN;
@@ -16,7 +17,11 @@ export const profile = () => ROOT_PROFILE;
 export const accountConfirm = () => ROOT_ACCOUNT_CONFIRM;
 export const register = () => ROOT_REGISTER;
 export const users = () => ROOT_USER;
+export const admin = () => ROOT_ADMIN;
 export const settings = (section?: string) =>
   `${ROOT_SETTINGS}/${section != null ? section : ""}`;
 export const user = (id?: string | number) =>
   `${ROOT_USER}/${id != null ? id : "new"}`;
+export const moduleList = (moduleName: string) => `${ROOT_ADMIN}/${moduleName}`;
+export const moduleForm = (moduleName: string, id?: string | number) =>
+  `${ROOT_ADMIN}/${moduleName}/${id != null ? id : "new"}`;
