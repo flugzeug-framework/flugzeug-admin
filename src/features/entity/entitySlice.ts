@@ -4,8 +4,10 @@ import { EntityModel, SchemaModel } from "models/entityModel";
 interface EntityState {
   isLoadingEntities: boolean;
   isLoadingSchema: boolean;
+  isLoadingModalSchema: boolean;
   entityList: EntityModel[];
   schema?: SchemaModel;
+  modalSchema?: SchemaModel;
   searchText: string;
   count: number;
   itemsPerPage: number;
@@ -17,7 +19,10 @@ interface EntityState {
 const initialState: EntityState = {
   isLoadingEntities: false,
   isLoadingSchema: false,
+  isLoadingModalSchema: false,
   entityList: [],
+  schema: undefined,
+  modalSchema: undefined,
   searchText: "",
   count: 0,
   itemsPerPage: 10,
@@ -35,6 +40,9 @@ export const entitySlice = createSlice({
     },
     setIsLoadingSchema: (state, action: PayloadAction<boolean>) => {
       state.isLoadingSchema = action.payload;
+    },
+    setIsLoadingModalSchema: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingModalSchema = action.payload;
     },
     setEntityList: (state, action: PayloadAction<EntityModel[]>) => {
       state.entityList = action.payload;
@@ -64,12 +72,16 @@ export const entitySlice = createSlice({
     setSchema: (state, action: PayloadAction<SchemaModel | undefined>) => {
       state.schema = action.payload;
     },
+    setModalSchema: (state, action: PayloadAction<SchemaModel | undefined>) => {
+      state.modalSchema = action.payload;
+    },
   },
 });
 
 export const {
   setIsLoadingEntities,
   setIsLoadingSchema,
+  setIsLoadingModalSchema,
   setEntityList,
   setEntitySearchText,
   setEntityCount,
@@ -78,6 +90,7 @@ export const {
   setEntitySort,
   setSelectedEntity,
   setSchema,
+  setModalSchema,
 } = entitySlice.actions;
 
 export const entityReducer = entitySlice.reducer;

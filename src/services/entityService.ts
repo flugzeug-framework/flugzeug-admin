@@ -1,11 +1,4 @@
-import {
-  EntityModel,
-  fakeNoteSchema,
-  fakeNotesData,
-  fakeUserSchema,
-  fakeUsersData,
-  SchemaModel,
-} from "models/entityModel";
+import { SchemaModel } from "models/entityModel";
 import { BaseService, ResponseData } from "./baseService";
 
 class EntityService extends BaseService<any> {
@@ -21,23 +14,6 @@ class EntityService extends BaseService<any> {
       `/${this.controllerName}/schema`
     );
     return data;
-  }
-
-  async getFakeSchema(controllerName: string): Promise<SchemaModel> {
-    return controllerName === "user" ? fakeUserSchema : fakeNoteSchema;
-  }
-
-  async getAllFakeData(controllerName: string): Promise<EntityModel[]> {
-    return controllerName === "user" ? fakeUsersData : fakeNotesData;
-  }
-
-  async getFakeDataById(
-    controllerName: string,
-    id: number
-  ): Promise<EntityModel> {
-    return controllerName === "user"
-      ? fakeUsersData[id - 1]
-      : fakeNotesData[id - 1];
   }
 }
 

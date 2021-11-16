@@ -1,10 +1,9 @@
 import { Visibility } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import { TableCustom } from "components/table/TableCustom";
-import { getAllFakeModels, getAllModels } from "features/admin/adminActions";
+import { getAllModels } from "features/admin/adminActions";
 import { selectModels } from "features/admin/adminSelectors";
 import { capitalize, noop } from "lodash";
-import { ModelModel } from "models/modelModel";
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -26,16 +25,15 @@ export function Admin() {
 
   useEffect(() => {
     dispatch(getAllModels());
-    dispatch(getAllFakeModels());
   }, [dispatch]);
 
   const handleClickEdit = (id: string) => () => {
     history.push(moduleList(id));
   };
 
-  const getRows = (models: ModelModel[]): MainTableRow[] =>
-    models.map((model: ModelModel) => {
-      const name: MainTableCell = { value: capitalize(model.name) ?? "" };
+  const getRows = (models: string[]): MainTableRow[] =>
+    models.map((model: string) => {
+      const name: MainTableCell = { value: capitalize(model) ?? "" };
       const action: MainTableCell = {
         value: (
           <Box
@@ -45,7 +43,7 @@ export function Admin() {
             marginLeft="-8px"
             maxWidth="120px"
           >
-            <IconButton aria-label="Edit" onClick={handleClickEdit(model.name)}>
+            <IconButton aria-label="Edit" onClick={handleClickEdit(model)}>
               <Visibility color="primary" />
             </IconButton>
           </Box>

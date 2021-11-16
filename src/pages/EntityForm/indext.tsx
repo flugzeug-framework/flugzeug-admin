@@ -1,16 +1,5 @@
-import {
-  Box,
-  Button,
-  Card,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import { EntityFormFields } from "components/EntityFormFields/indext";
 import {
   createEntity,
   getEntityById,
@@ -22,12 +11,11 @@ import {
   selectSelectedEntity,
 } from "features/entity/entitySelectors";
 import { setSchema, setSelectedEntity } from "features/entity/entitySlice";
-import { capitalize, cloneDeep } from "lodash";
-import { SchemaModel } from "models/entityModel";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { entityService } from "services/entityService";
+import { useHistory, useParams } from "react-router-dom";
+import { moduleList } from "routes/Roots";
+import { getAtributes } from "utils/entityUtils";
 
 export function EntityForm() {
   let { moduleName, id } = useParams<{
@@ -36,6 +24,7 @@ export function EntityForm() {
   }>();
   const isEditMode = () => id !== "new";
   const dispatch = useDispatch();
+  const history = useHistory();
   const schema = useSelector(selectSchema);
   const currentEntity = useSelector(selectSelectedEntity);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,9 +40,7 @@ export function EntityForm() {
   }, [moduleName, dispatch]);
 
   useEffect(() => {
-    if (id) entityService(moduleName).getById(id);
-
-    if (id) dispatch(getEntityById(moduleName, Number(id)));
+    if (id !== "new") dispatch(getEntityById(moduleName, Number(id)));
   }, [moduleName, id, dispatch]);
 
   useEffect(() => {
@@ -88,37 +75,26 @@ export function EntityForm() {
       setFormValues(objAttr);
       setIsLoading(false);
     }
+    // eslint-disable-next-line
   }, [schema, currentEntity]);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    let success;
     if (isEditMode()) {
-      dispatch(updateEntity(moduleName, Number(id), formValues));
+      success = await dispatch(
+        updateEntity(moduleName, Number(id), formValues)
+      );
     } else {
-      dispatch(createEntity(moduleName, formValues));
+      success = await dispatch(createEntity(moduleName, formValues));
+    }
+    if (success as any) {
+      history.push(moduleList(moduleName));
     }
   };
 
-  const getAtributes = (currentSchema: SchemaModel) => {
-    const entries = Object.entries(currentSchema);
-    entries.sort();
-    return entries;
-  };
-
-  const handleChangeField = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const clonedFormValues = cloneDeep(formValues);
-    clonedFormValues[e.target.name] = e.target.value;
-    console.log(clonedFormValues);
-
-    setFormValues(clonedFormValues);
-  };
-
-  const handleChangeSelect = (e: SelectChangeEvent) => {
-    const clonedFormValues = cloneDeep(formValues);
-    clonedFormValues[e.target.name] = e.target.value;
-    console.log(clonedFormValues);
-    setFormValues(clonedFormValues);
-  };
+  const handleChangeForm = (updatedState: { [key: string]: any }) =>
+    setFormValues(updatedState);
 
   return (
     <Box padding="24px">
@@ -131,69 +107,14 @@ export function EntityForm() {
           </Box>
           <form onSubmit={handleSubmit}>
             <Grid container rowSpacing={2} direction="column">
-              {!isLoading && schema ? (
-                getAtributes(schema).map(([key, field]) => {
-                  switch (field.type) {
-                    case "string":
-                      return (
-                        <Grid item width="25%" key={key}>
-                          <TextField
-                            size="small"
-                            label={capitalize(field.fieldName)}
-                            type="text"
-                            name={field.fieldName}
-                            value={formValues[key]}
-                            onChange={handleChangeField}
-                          />
-                        </Grid>
-                      );
-                    case "integer":
-                      return (
-                        <Grid item width="25%" key={key}>
-                          <TextField
-                            size="small"
-                            label={capitalize(field.fieldName)}
-                            type="number"
-                            name={field.fieldName}
-                            value={formValues[key]}
-                            onChange={handleChangeField}
-                          />
-                        </Grid>
-                      );
-                    case "enum":
-                      return (
-                        <Grid item width="25%" key={key}>
-                          <FormControl>
-                            <InputLabel id={`${field.fieldName}-select`}>
-                              {capitalize(field.fieldName)}
-                            </InputLabel>
-                            <Select
-                              labelId={`${field.fieldName}-select`}
-                              id={field.fieldName}
-                              name={field.fieldName}
-                              value={formValues[key]}
-                              label={capitalize(field.fieldName)}
-                              onChange={handleChangeSelect}
-                            >
-                              <MenuItem value="">
-                                <em>None</em>
-                              </MenuItem>
-                              {field.values?.map((value) => (
-                                <MenuItem value={value}>
-                                  {capitalize(value)}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                      );
-
-                    default:
-                      return null;
-                  }
-                })
+              {!isLoading ? (
+                <EntityFormFields
+                  formValues={formValues}
+                  schema={schema}
+                  onChangeForm={handleChangeForm}
+                />
               ) : (
-                <Typography>No schema</Typography>
+                <Typography>Loading...</Typography>
               )}
               <Grid item>
                 <Button type="submit" variant="contained">

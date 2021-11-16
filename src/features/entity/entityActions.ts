@@ -9,6 +9,8 @@ import {
   setSchema,
   setSelectedEntity,
   setIsLoadingSchema,
+  setIsLoadingModalSchema,
+  setModalSchema,
 } from "./entitySlice";
 import {
   selectEntitySearchText,
@@ -61,41 +63,13 @@ export const getAllEntityList = (controllerName: string): AppThunk => async (
   }
 };
 
-// TODO: change service methods for real ones
-export const getAllEntity = (controllerName: string): AppThunk => async (
-  dispatch
-) => {
-  dispatch(setIsLoadingEntities(true));
-  try {
-    const data = await entityService(controllerName).getAllFakeData(
-      controllerName
-    );
-
-    dispatch(setEntityList(data));
-  } catch (error) {
-    dispatch(
-      setToast({
-        message: describeApiError(error),
-        isActive: true,
-        type: "error",
-      })
-    );
-    console.error(error);
-  } finally {
-    dispatch(setIsLoadingEntities(false));
-  }
-};
-
 export const getEntityById = (
   controllerName: string,
   id: number
 ): AppThunk => async (dispatch) => {
   dispatch(setIsLoadingEntities(true));
   try {
-    const data = await entityService(controllerName).getFakeDataById(
-      controllerName,
-      id
-    );
+    const { data } = await entityService(controllerName).getById(id);
 
     dispatch(setSelectedEntity(data));
   } catch (error) {
@@ -117,9 +91,17 @@ export const createEntity = (
   entity: EntityModel
 ): AppThunk => async (dispatch) => {
   dispatch(setIsLoadingEntities(true));
+  let success = false;
   try {
-    const data = await entityService(controllerName).create(entity);
-    console.log(data);
+    await entityService(controllerName).create(entity);
+    dispatch(
+      setToast({
+        message: `${controllerName} created successfully`,
+        isActive: true,
+        type: "success",
+      })
+    );
+    success = true;
   } catch (error) {
     dispatch(
       setToast({
@@ -129,8 +111,10 @@ export const createEntity = (
       })
     );
     console.error(error);
+    success = false;
   } finally {
     dispatch(setIsLoadingEntities(false));
+    return success;
   }
 };
 
@@ -140,9 +124,18 @@ export const updateEntity = (
   entity: EntityModel
 ): AppThunk => async (dispatch) => {
   dispatch(setIsLoadingEntities(true));
+
+  let success = false;
   try {
-    const data = await entityService(controllerName).update(id, entity);
-    console.log(data);
+    await entityService(controllerName).update(id, entity);
+    dispatch(
+      setToast({
+        message: `${controllerName} updated successfully`,
+        isActive: true,
+        type: "success",
+      })
+    );
+    success = true;
   } catch (error) {
     dispatch(
       setToast({
@@ -152,8 +145,10 @@ export const updateEntity = (
       })
     );
     console.error(error);
+    success = false;
   } finally {
     dispatch(setIsLoadingEntities(false));
+    return success;
   }
 };
 
@@ -164,6 +159,14 @@ export const deleteEntity = (
   dispatch(setIsLoadingEntities(true));
   try {
     await entityService(controllerName).delete(id);
+    dispatch(getAllEntityList(controllerName));
+    dispatch(
+      setToast({
+        message: `${controllerName} deleted successfully`,
+        isActive: true,
+        type: "success",
+      })
+    );
   } catch (error) {
     dispatch(
       setToast({
@@ -178,16 +181,17 @@ export const deleteEntity = (
   }
 };
 
-export const getSchema = (controllerName: string): AppThunk => async (
-  dispatch
-) => {
-  dispatch(setIsLoadingSchema(true));
+export const getSchema = (
+  controllerName: string,
+  isModalSchema = false
+): AppThunk => async (dispatch) => {
+  dispatch(
+    isModalSchema ? setIsLoadingModalSchema(true) : setIsLoadingSchema(true)
+  );
   try {
-    const data = await entityService(controllerName).getFakeSchema(
-      controllerName
-    );
+    const { data } = await entityService(controllerName).getSchema();
 
-    dispatch(setSchema(data));
+    dispatch(isModalSchema ? setModalSchema(data) : setSchema(data));
   } catch (error) {
     dispatch(
       setToast({
@@ -198,6 +202,8 @@ export const getSchema = (controllerName: string): AppThunk => async (
     );
     console.error(error);
   } finally {
-    dispatch(setIsLoadingSchema(false));
+    dispatch(
+      isModalSchema ? setIsLoadingModalSchema(false) : setIsLoadingSchema(false)
+    );
   }
 };

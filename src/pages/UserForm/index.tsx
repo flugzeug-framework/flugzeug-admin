@@ -2,7 +2,6 @@ import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
 import { LoadingSpinner } from "components/LoadingSpinner/LoadingSpinner";
 import {
   createUser,
-  getAllRoles,
   getUser,
   updateUser,
 } from "features/userManagement/userManagementActions";
@@ -76,7 +75,6 @@ export function UserForm() {
   };
 
   useEffect(() => {
-    dispatch(getAllRoles());
     if (isEditMode()) {
       // Load user details
       dispatch(getUser(parseInt(id as string)));
@@ -87,8 +85,6 @@ export function UserForm() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!roles.length) return;
-
     if (user != null) {
       setFirstName(user.firstName || "");
       setLastName(user.lastName || "");
@@ -100,8 +96,6 @@ export function UserForm() {
       setLastName("");
       setEmail("");
       setAuthType("email");
-      // Set defaul role for new users
-      setRoleId(roles[0].id.toString());
     }
     // eslint-disable-next-line
   }, [user, roles]);

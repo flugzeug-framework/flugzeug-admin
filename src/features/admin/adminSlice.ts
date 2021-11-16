@@ -1,15 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ModelModel } from "models/modelModel";
 
 interface AdminState {
   isLoadingModels: boolean;
-  models: ModelModel[];
+  models: string[];
   searchText: string;
   count: number;
   itemsPerPage: number;
   page: number;
   sort: [string, "ASC" | "DESC"][];
-  selectedModel: ModelModel | null;
+  selectedModel: string | null;
 }
 
 const initialState: AdminState = {
@@ -30,7 +29,7 @@ export const adminSlice = createSlice({
     setIsLoadingModels: (state, action: PayloadAction<boolean>) => {
       state.isLoadingModels = action.payload;
     },
-    setModels: (state, action: PayloadAction<ModelModel[]>) => {
+    setModels: (state, action: PayloadAction<string[]>) => {
       state.models = action.payload;
     },
     setModelSearchText: (state, action: PayloadAction<string>) => {
@@ -52,7 +51,7 @@ export const adminSlice = createSlice({
     ) => {
       state.sort = action.payload;
     },
-    setSelectedModel: (state, action: PayloadAction<ModelModel | null>) => {
+    setSelectedModel: (state, action: PayloadAction<string | null>) => {
       state.selectedModel = action.payload;
     },
   },

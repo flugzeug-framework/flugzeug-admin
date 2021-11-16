@@ -49,24 +49,3 @@ export const getAllModels = (): AppThunk => async (dispatch, getState) => {
     dispatch(setIsLoadingModels(false));
   }
 };
-
-// TODO: remove
-export const getAllFakeModels = (): AppThunk => async (dispatch) => {
-  dispatch(setIsLoadingModels(true));
-  try {
-    const data = await modelService.getAllFakeModels();
-
-    dispatch(setModels(data));
-  } catch (error) {
-    dispatch(
-      setToast({
-        message: describeApiError(error),
-        isActive: true,
-        type: "error",
-      })
-    );
-    console.error(error);
-  } finally {
-    dispatch(setIsLoadingModels(false));
-  }
-};
