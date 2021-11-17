@@ -2,12 +2,13 @@ import { Box, List, ListItem, ListItemText, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
 import React, { Fragment } from "react";
 import { Link, LinkProps, useLocation } from "react-router-dom";
-import { home, profile, users } from "routes/Roots";
+import { admin, home, profile, users } from "routes/Roots";
 
 enum SideMenuLabels {
   HOME = "Home",
   USERS = "Users",
   PROFILE = "Profile",
+  ADMIN = "Admin",
 }
 
 interface ListItemLinkProps {
@@ -79,6 +80,8 @@ export function SideMenu({ children }: any) {
         return users();
       case SideMenuLabels.PROFILE:
         return profile();
+      case SideMenuLabels.ADMIN:
+        return admin();
       default:
         return home();
     }

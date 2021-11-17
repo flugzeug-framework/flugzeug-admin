@@ -54,7 +54,7 @@ class AuthService extends BaseService<Credentials> {
     this.api.defaults.headers = this.getDefaultHeaders();
 
     const { data } = await this.api.post<ResponseData<Credentials>>(
-      `/emailauth/login`,
+      `/${this.controllerName}/login`,
       {
         email,
         password,

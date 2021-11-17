@@ -36,8 +36,8 @@ export const getAllUsers = (): AppThunk => async (dispatch, getState) => {
   if (searchText.length) {
     opts.where = {
       $or: {
-        name: { $iLike: `%${searchText}%` },
-        email: { $iLike: `%${searchText}%` },
+        name: { $Like: `%${searchText}%` },
+        email: { $Like: `%${searchText}%` },
       },
     };
   }

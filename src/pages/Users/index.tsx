@@ -122,10 +122,12 @@ export function Users() {
     onClickEdit: (id: string) => void
   ): MainTableRow[] =>
     expenses.map((user: UserModel) => {
-      const firstName: MainTableCell = { value: user.firstName ?? "" };
-      const lastName: MainTableCell = { value: user.lastName ?? "" };
+      const firstName: MainTableCell = { value: user.firstName ?? "- -" };
+      const lastName: MainTableCell = { value: user.lastName ?? "- -" };
       const email: MainTableCell = { value: user.email };
-      const role: MainTableCell = { value: user.roles[0].name };
+      const role: MainTableCell = {
+        value: user.roles.length ? user.roles[0].name : "- -",
+      };
       const action: MainTableCell = {
         value: (
           <ActionIcons
