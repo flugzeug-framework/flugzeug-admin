@@ -22,6 +22,21 @@ export const getMainHeaders = (schema?: SchemaModel): MainTableColumn[] => {
   return [{ field: "actions", headerName: "actions" }, ...headers];
 };
 
+export const getAttributes = (schema?: SchemaModel): string[] => {
+  if (!schema) return [];
+
+  const headers: string[] = [];
+
+  const entries = Object.entries(schema);
+  entries.sort();
+
+  for (const [, value] of entries) {
+    headers.push(value.fieldName);
+  }
+
+  return headers;
+};
+
 const mapEntityToTableCells = (entity: EntityModel, schema: SchemaModel) => {
   const updatedEntity: EntityModel = {};
   const entries = Object.entries(schema);
