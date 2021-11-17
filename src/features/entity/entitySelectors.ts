@@ -10,6 +10,8 @@ export const selectIsLoadingModalSchema = (state: RootState) =>
 export const selectEntityList = (state: RootState) => state.entity.entityList;
 export const selectEntitySearchText = (state: RootState) =>
   state.entity.searchText;
+export const selectEntitySearchOption = (state: RootState) =>
+  state.entity.searchOption;
 export const selectEntityCount = (state: RootState) => state.entity.count;
 export const selectEntitiesPerPage = (state: RootState) =>
   state.entity.itemsPerPage;

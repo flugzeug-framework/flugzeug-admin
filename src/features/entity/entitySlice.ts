@@ -9,6 +9,7 @@ interface EntityState {
   schema?: SchemaModel;
   modalSchema?: SchemaModel;
   searchText: string;
+  searchOption: string;
   count: number;
   itemsPerPage: number;
   page: number;
@@ -24,6 +25,7 @@ const initialState: EntityState = {
   schema: undefined,
   modalSchema: undefined,
   searchText: "",
+  searchOption: "",
   count: 0,
   itemsPerPage: 10,
   page: 1,
@@ -50,6 +52,9 @@ export const entitySlice = createSlice({
     setEntitySearchText: (state, action: PayloadAction<string>) => {
       state.searchText = action.payload;
       state.page = 1;
+    },
+    setEntitySearchOption: (state, action: PayloadAction<string>) => {
+      state.searchOption = action.payload;
     },
     setEntityCount: (state, action: PayloadAction<number>) => {
       state.count = action.payload;
@@ -84,6 +89,7 @@ export const {
   setIsLoadingModalSchema,
   setEntityList,
   setEntitySearchText,
+  setEntitySearchOption,
   setEntityCount,
   setEntityPerPage,
   setEntityPage,

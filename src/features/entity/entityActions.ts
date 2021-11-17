@@ -17,6 +17,7 @@ import {
   selectEntitiesPerPage,
   selectEntitiesPage,
   selectModulesSort,
+  selectEntitySearchOption,
 } from "./entitySelectors";
 import { entityService } from "services/entityService";
 import { EntityModel } from "models/entityModel";
@@ -27,6 +28,7 @@ export const getAllEntityList = (controllerName: string): AppThunk => async (
 ) => {
   const state = getState();
   const searchText = selectEntitySearchText(state);
+  const searchOption = selectEntitySearchOption(state);
   const limit = selectEntitiesPerPage(state);
   const page = selectEntitiesPage(state);
   const offset = (page - 1) * limit;
@@ -37,9 +39,9 @@ export const getAllEntityList = (controllerName: string): AppThunk => async (
     order,
   };
 
-  if (searchText.length) {
+  if (searchText.length && searchOption.length) {
     opts.where = {
-      name: { $iLike: `%${searchText}%` },
+      [searchOption]: { $Like: `%${searchText}%` },
     };
   }
 
