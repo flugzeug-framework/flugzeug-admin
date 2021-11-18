@@ -41,7 +41,7 @@ export const getAllEntityList = (controllerName: string): AppThunk => async (
 
   if (searchText.length && searchOption.length) {
     opts.where = {
-      [searchOption]: { $Like: `%${searchText}%` },
+      [searchOption]: { $like: `%${searchText}%` },
     };
   }
 

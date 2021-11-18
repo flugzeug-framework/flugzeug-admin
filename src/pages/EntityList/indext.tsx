@@ -100,10 +100,6 @@ export function EntityList() {
     history.push(moduleForm(moduleName));
   };
 
-  if (isLoadingSchema || isLoadingEntities) {
-    return <Fragment>Loading</Fragment>;
-  }
-
   return (
     <Fragment>
       <Box
