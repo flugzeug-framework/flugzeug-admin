@@ -26,7 +26,7 @@ export const getAllModels = (): AppThunk => async (dispatch, getState) => {
 
   if (searchText.length) {
     opts.where = {
-      name: { $iLike: `%${searchText}%` },
+      name: { $like: `%${searchText}%` },
     };
   }
 
