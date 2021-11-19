@@ -1,15 +1,22 @@
 import { ManageSearch } from "@mui/icons-material";
 import {
   FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
+import { 
+  MobileDateTimePicker,
+  LocalizationProvider
+} from '@mui/lab';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import { EntityModal } from "components/EntityModal";
 import { capitalize, cloneDeep } from "lodash";
 import { SchemaModel } from "models/entityModel";
@@ -47,6 +54,11 @@ export function EntityFormFields({
     onChangeForm(clonedFormValues);
     setIsModalOpen(false);
   };
+
+  const handleChangeDate = (value: Date | null, field: string) => {
+    //const clonedFormValues = cloneDeep(formValues);
+    console.log(typeof value)
+  }
 
   const handleClickAddIcon = () => setIsModalOpen(true);
 
@@ -125,13 +137,57 @@ export function EntityFormFields({
                         <em>None</em>
                       </MenuItem>
                       {field.values?.map((value) => (
-                        <MenuItem value={value}>{capitalize(value)}</MenuItem>
+                        <MenuItem key={`${field.fieldName}-${value}`} value={value}>{capitalize(value)}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 </Grid>
               );
-
+            case "boolean":
+              return (
+                <Grid item width="25%" key={key}>
+                  <FormControl>
+                    <FormControlLabel
+                      control={
+                        <Switch value={formValues[key]} />
+                      }
+                      label={capitalize(field.fieldName)}
+                    />
+                  </FormControl>
+                </Grid>
+              );
+            case "date":
+              return (
+                <Grid item width="25%" key={key}>
+                  <LocalizationProvider dateAdapter={DateAdapter}>
+                    <MobileDateTimePicker
+                      label={capitalize(field.fieldName)}
+                      value={formValues[key]}
+                      onChange={(value: Date | null) => handleChangeDate(value, field.fieldName)}
+                      renderInput={(params:any) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+              );
+            case "float":
+              return (
+                <Grid
+                  item
+                  display="flex"
+                  alignItems="center"
+                  width={field.references ? "calc(25% + 34px)" : "25%"}
+                  key={key}
+                >
+                  <TextField
+                    size="small"
+                    label={capitalize(field.fieldName)}
+                    type="number"
+                    name={field.fieldName}
+                    value={formValues[key]}
+                    onChange={handleChangeField}
+                  />
+                </Grid>
+              );
             default:
               return null;
           }
