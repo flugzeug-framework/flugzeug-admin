@@ -193,7 +193,7 @@ export const registerWithemail =
       dispatch(setHasError(false));
       await authService.registerEmailUser(name, email, password);
       dispatch(setIsRegisterSuccessful(true));
-    } catch (error) {
+    } catch (error: any) {
       const response = error.response?.data;
 
       switch (response?.message) {

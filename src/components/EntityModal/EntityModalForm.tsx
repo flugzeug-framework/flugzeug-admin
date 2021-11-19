@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { EntityFormFields } from "components/EntityFormFields/indext";
+import { EntityFormFields } from "components/EntityFormFields";
 import { selectModalSchema } from "features/entity/entitySelectors";
 import { setIsLoadingEntities } from "features/entity/entitySlice";
 import { setToast } from "features/toast/toastSlice";
