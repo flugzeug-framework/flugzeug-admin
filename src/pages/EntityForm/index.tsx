@@ -1,6 +1,6 @@
 import { Box, Button, Card, Grid, Typography } from "@mui/material";
 import { BackButton } from "components/BackButton";
-import { EntityFormFields } from "components/EntityFormFields/indext";
+import { EntityFormFields } from "components/EntityFormFields";
 import {
   createEntity,
   getEntityById,
