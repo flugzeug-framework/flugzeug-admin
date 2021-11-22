@@ -1,0 +1,18 @@
+.json-editor-component-admin select,
+.json-editor-component-admin input {
+  padding: 7px !important;
+  margin-bottom: 7px;
+}
+
+.json-editor-component-admin label {
+  margin-bottom: 7px;
+  display: block;
+}
+
+.json-editor-component-admin label.capitalize {
+  text-transform: capitalize;
+}
+
+.json-editor-component-admin .json-form div div div {
+  color: #0a0a0a !important;
+}

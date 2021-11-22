@@ -1,3 +1,4 @@
+import React, { Fragment, useState } from "react";
 import { ManageSearch } from "@mui/icons-material";
 import {
   FormControl,
@@ -17,11 +18,12 @@ import {
   LocalizationProvider
 } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterDateFns';
-import { EntityModal } from "components/EntityModal";
 import { capitalize, cloneDeep } from "lodash";
+import { ChangeEvent } from "hoist-non-react-statics/node_modules/@types/react";
 import { SchemaModel } from "models/entityModel";
-import React, { Fragment, useState } from "react";
-import { getAtributes } from "utils/entityUtils";
+import { EntityModal } from "components/EntityModal";
+import JSONEditor from "components/JSONEditor/JSONEditor";
+import { getAtributes } from "../../utils/entityUtils";
 
 interface EntityFormFieldsProps {
   formValues: { [key: string]: any };
@@ -56,8 +58,22 @@ export function EntityFormFields({
   };
 
   const handleChangeDate = (value: Date | null, field: string) => {
-    //const clonedFormValues = cloneDeep(formValues);
-    console.log(typeof value)
+    const clonedFormValues = cloneDeep(formValues);
+    if(value === null) return;
+    clonedFormValues[field] = value;
+    onChangeForm(clonedFormValues);
+  }
+
+  const handleSwitch = (e: ChangeEvent<HTMLInputElement>) => {
+    const clonedFormValues = cloneDeep(formValues);
+    clonedFormValues[e.target.name] = e.target.value.toLowerCase() === 'true' ? false : true;
+    onChangeForm(clonedFormValues);
+  }
+
+  const handleJSON = (data:Object, field: string) => {
+    const clonedFormValues = cloneDeep(formValues);
+    clonedFormValues[field] = data;
+    onChangeForm(clonedFormValues);
   }
 
   const handleClickAddIcon = () => setIsModalOpen(true);
@@ -137,7 +153,12 @@ export function EntityFormFields({
                         <em>None</em>
                       </MenuItem>
                       {field.values?.map((value) => (
-                        <MenuItem key={`${field.fieldName}-${value}`} value={value}>{capitalize(value)}</MenuItem>
+                        <MenuItem
+                          key={`${field.fieldName}-${value}`}
+                          value={value}
+                        >
+                          {capitalize(value)}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -149,7 +170,12 @@ export function EntityFormFields({
                   <FormControl>
                     <FormControlLabel
                       control={
-                        <Switch value={formValues[key]} />
+                        <Switch
+                          name={field.fieldName}
+                          value={formValues[key]}
+                          checked={formValues[key]}
+                          onChange={handleSwitch}
+                        />
                       }
                       label={capitalize(field.fieldName)}
                     />
@@ -186,6 +212,25 @@ export function EntityFormFields({
                     value={formValues[key]}
                     onChange={handleChangeField}
                   />
+                </Grid>
+              );
+            case "jsontype":
+              return (
+                <Grid
+                  item
+                  display="flex"
+                  alignItems="center"
+                  width={field.references ? "calc(25% + 34px)" : "25%"}
+                  key={key}
+                >
+                  <FormControl>
+                  <JSONEditor
+                    name={field.fieldName}
+                    data={formValues[key]}
+                    collapsible
+                    onChange={(_,__,___,data:Object) => handleJSON(data, field.fieldName)}
+                  />
+                  </FormControl>
                 </Grid>
               );
             default:
