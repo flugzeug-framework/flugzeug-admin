@@ -13,7 +13,7 @@ export interface ServiceOptions {
   where?: any;
   limit?: number;
   offset?: number;
-  order?: [string, "ASC" | "DESC"][];
+  order?: [string, "ASC" | "DESC"][] | "ASC" | "DESC";
 }
 
 export interface ResponseData<T> {

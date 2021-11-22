@@ -12,9 +12,10 @@ import {
   setModelSearchText,
   setModelsPage,
   setModelsPerPage,
+  setModelsSort,
 } from "features/admin/adminSlice";
-import { capitalize, noop } from "lodash";
-import React, { Fragment, useEffect } from "react";
+import { capitalize } from "lodash";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { moduleList } from "routes/Roots";
@@ -24,6 +25,7 @@ export const mainTableHeaderColumns: MainTableColumn[] = [
   {
     field: "name",
     headerName: "name",
+    hasSorting: true,
   },
   { field: "action", headerName: "Action" },
 ];
@@ -35,6 +37,9 @@ export function Admin() {
   const entityCount = useSelector(selectModelsCount);
   const entityPerPage = useSelector(selectModelsPerPage);
   const page = useSelector(selectModelsPage);
+  const [sortingOptions, setSortingOptions] = useState<
+    [string, "ASC" | "DESC"][]
+  >([]);
 
   useEffect(() => {
     dispatch(setModelsPerPage(10));
@@ -89,6 +94,12 @@ export function Admin() {
     dispatch(getAllModels());
   };
 
+  const handleClickSorting = (sortingValues: [string, "ASC" | "DESC"][]) => {
+    setSortingOptions(sortingValues);
+    dispatch(setModelsSort(sortingValues));
+    dispatch(getAllModels());
+  };
+
   return (
     <Fragment>
       <Box
@@ -103,7 +114,8 @@ export function Admin() {
         columns={mainTableHeaderColumns}
         noRowsMessage="Models not found"
         rows={getRows(modelList)}
-        onClickSort={noop}
+        sortingOptions={sortingOptions}
+        onClickSort={handleClickSorting}
       />
       <TablePagination
         component="div"
