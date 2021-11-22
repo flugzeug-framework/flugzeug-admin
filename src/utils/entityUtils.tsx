@@ -16,6 +16,7 @@ export const getMainHeaders = (schema?: SchemaModel): MainTableColumn[] => {
     headers.push({
       field: value.fieldName,
       headerName: value.fieldName,
+      hasSorting: true,
     });
   }
 

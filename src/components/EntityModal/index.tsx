@@ -26,20 +26,23 @@ export function EntityModal({
     setIsTable(true);
   };
 
+  const handleClose = () => {
+    onClose();
+    setIsTable(true);
+  };
+
   return (
-    <Modal open={isOpen} onClose={() => onClose()}>
+    <Modal open={isOpen} onClose={handleClose}>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
-        maxWidth="95%"
-        width="95%"
-        height="calc(100vh - 32px)"
-        maxHeight="calc(100vh - 32px)"
+        width="100%"
+        height="100vh"
       >
         <Card>
           <Box display="flex" justifyContent="flex-end" padding="8px 16px 0 0">
-            <IconButton aria-label="Close" onClick={onClose}>
+            <IconButton aria-label="Close" onClick={handleClose}>
               <Close color="primary" />
             </IconButton>
           </Box>

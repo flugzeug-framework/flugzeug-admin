@@ -13,17 +13,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { 
-  MobileDateTimePicker,
-  LocalizationProvider
-} from '@mui/lab';
-import DateAdapter from '@mui/lab/AdapterDateFns';
+import { MobileDateTimePicker, LocalizationProvider } from "@mui/lab";
+import DateAdapter from "@mui/lab/AdapterDateFns";
 import { capitalize, cloneDeep } from "lodash";
 import { ChangeEvent } from "hoist-non-react-statics/node_modules/@types/react";
 import { SchemaModel } from "models/entityModel";
 import { EntityModal } from "components/EntityModal";
 import JSONEditor from "components/JSONEditor/JSONEditor";
-import { getAtributes } from "../../utils/entityUtils";
+import { getAtributes } from "utils/entityUtils";
 
 interface EntityFormFieldsProps {
   formValues: { [key: string]: any };
@@ -36,7 +33,9 @@ export function EntityFormFields({
   schema,
   onChangeForm,
 }: EntityFormFieldsProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const handleChangeField = (e: React.ChangeEvent<HTMLInputElement>) => {
     const clonedFormValues = cloneDeep(formValues);
@@ -54,31 +53,35 @@ export function EntityFormFields({
     const clonedFormValues = cloneDeep(formValues);
     clonedFormValues[field] = id;
     onChangeForm(clonedFormValues);
-    setIsModalOpen(false);
+    setIsModalOpen({ ...isModalOpen, [field]: false });
   };
 
+  const handleClickAddIcon = (field: string) => () => {
+    setIsModalOpen({ ...isModalOpen, [field]: true });
+  };
   const handleChangeDate = (value: Date | null, field: string) => {
     const clonedFormValues = cloneDeep(formValues);
-    if(value === null) return;
+    if (value === null) return;
     clonedFormValues[field] = value;
     onChangeForm(clonedFormValues);
-  }
+  };
 
   const handleSwitch = (e: ChangeEvent<HTMLInputElement>) => {
     const clonedFormValues = cloneDeep(formValues);
-    clonedFormValues[e.target.name] = e.target.value.toLowerCase() === 'true' ? false : true;
+    clonedFormValues[e.target.name] =
+      e.target.value.toLowerCase() === "true" ? false : true;
     onChangeForm(clonedFormValues);
-  }
+  };
 
-  const handleJSON = (data:Object, field: string) => {
+  const handleJSON = (data: Object, field: string) => {
     const clonedFormValues = cloneDeep(formValues);
     clonedFormValues[field] = data;
     onChangeForm(clonedFormValues);
-  }
+  };
 
-  const handleClickAddIcon = () => setIsModalOpen(true);
-
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseModal = (field: string) => () => {
+    setIsModalOpen({ ...isModalOpen, [field]: false });
+  };
 
   return (
     <Fragment>
@@ -120,14 +123,14 @@ export function EntityFormFields({
                       <IconButton
                         size="small"
                         aria-label="add"
-                        onClick={handleClickAddIcon}
+                        onClick={handleClickAddIcon(field.fieldName)}
                       >
                         <ManageSearch color="primary" />
                       </IconButton>
                       <EntityModal
-                        isOpen={isModalOpen}
+                        isOpen={isModalOpen[field.fieldName]}
                         modelName={field.references.model}
-                        onClose={handleCloseModal}
+                        onClose={handleCloseModal(field.fieldName)}
                         onSelectOption={handleChangeModal(field.fieldName)}
                       />
                     </Fragment>
@@ -189,8 +192,10 @@ export function EntityFormFields({
                     <MobileDateTimePicker
                       label={capitalize(field.fieldName)}
                       value={formValues[key]}
-                      onChange={(value: Date | null) => handleChangeDate(value, field.fieldName)}
-                      renderInput={(params:any) => <TextField {...params} />}
+                      onChange={(value: Date | null) =>
+                        handleChangeDate(value, field.fieldName)
+                      }
+                      renderInput={(params: any) => <TextField {...params} />}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -224,12 +229,14 @@ export function EntityFormFields({
                   key={key}
                 >
                   <FormControl>
-                  <JSONEditor
-                    name={field.fieldName}
-                    data={formValues[key]}
-                    collapsible
-                    onChange={(_,__,___,data:Object) => handleJSON(data, field.fieldName)}
-                  />
+                    <JSONEditor
+                      name={field.fieldName}
+                      data={formValues[key]}
+                      collapsible
+                      onChange={(_, __, ___, data: Object) =>
+                        handleJSON(data, field.fieldName)
+                      }
+                    />
                   </FormControl>
                 </Grid>
               );

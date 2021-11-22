@@ -18,10 +18,11 @@ export const getAllModels = (): AppThunk => async (dispatch, getState) => {
   const page = selectModelsPage(state);
   const offset = (page - 1) * limit;
   const order = selectModelsSort(state);
+
   const opts: ServiceOptions = {
     limit,
     offset,
-    order,
+    order: order.length ? order[0][1] : undefined,
   };
 
   if (searchText.length) {
@@ -32,7 +33,7 @@ export const getAllModels = (): AppThunk => async (dispatch, getState) => {
 
   dispatch(setIsLoadingModels(true));
   try {
-    const { data, count } = await modelService.getAll(opts);
+    const { data, count } = await modelService.getAllModels(opts);
 
     dispatch(setModels(data));
     dispatch(setModelsCount(count));
