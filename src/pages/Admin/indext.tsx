@@ -1,8 +1,18 @@
 import { Visibility } from "@mui/icons-material";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, TablePagination, Typography } from "@mui/material";
 import { TableCustom } from "components/table/TableCustom";
 import { getAllModels } from "features/admin/adminActions";
-import { selectModels } from "features/admin/adminSelectors";
+import {
+  selectModels,
+  selectModelsCount,
+  selectModelsPage,
+  selectModelsPerPage,
+} from "features/admin/adminSelectors";
+import {
+  setModelSearchText,
+  setModelsPage,
+  setModelsPerPage,
+} from "features/admin/adminSlice";
 import { capitalize, noop } from "lodash";
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,8 +32,14 @@ export function Admin() {
   const dispatch = useDispatch();
   const history = useHistory();
   const modelList = useSelector(selectModels);
+  const entityCount = useSelector(selectModelsCount);
+  const entityPerPage = useSelector(selectModelsPerPage);
+  const page = useSelector(selectModelsPage);
 
   useEffect(() => {
+    dispatch(setModelsPerPage(10));
+    dispatch(setModelsPage(0));
+    dispatch(setModelSearchText(""));
     dispatch(getAllModels());
   }, [dispatch]);
 
@@ -56,6 +72,23 @@ export function Admin() {
         innerCells,
       };
     });
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    dispatch(setModelsPage(newPage + 1));
+    dispatch(getAllModels());
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(setModelsPerPage(parseInt(event.target.value, 10)));
+    dispatch(setModelsPage(1));
+    dispatch(getAllModels());
+  };
+
   return (
     <Fragment>
       <Box
@@ -71,6 +104,15 @@ export function Admin() {
         noRowsMessage="Models not found"
         rows={getRows(modelList)}
         onClickSort={noop}
+      />
+      <TablePagination
+        component="div"
+        count={entityCount}
+        page={page - 1}
+        rowsPerPageOptions={[1, 5, 10, 15, 20]}
+        onPageChange={handleChangePage}
+        rowsPerPage={entityPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Fragment>
   );

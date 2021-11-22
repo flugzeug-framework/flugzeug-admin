@@ -9,6 +9,7 @@ import {
   TablePagination,
   Typography,
 } from "@mui/material";
+import { BackButton } from "components/BackButton";
 import SearchInput from "components/SearchInput/SearchInput";
 import { TableCustom } from "components/table/TableCustom";
 import {
@@ -32,12 +33,13 @@ import {
   setEntityPerPage,
   setEntitySearchOption,
   setEntitySearchText,
+  setEntitySort,
 } from "features/entity/entitySlice";
-import { capitalize, noop } from "lodash";
-import React, { Fragment, useEffect } from "react";
+import { capitalize } from "lodash";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { moduleForm } from "routes/Roots";
+import { admin, moduleForm } from "routes/Roots";
 import { getAttributes, getMainHeaders, getMainRows } from "utils/entityUtils";
 
 export function EntityList() {
@@ -53,8 +55,16 @@ export function EntityList() {
   const searchOption = useSelector(selectEntitySearchOption);
   const isLoadingSchema = useSelector(selectIsLoadingSchema);
   const isLoadingEntities = useSelector(selectIsLoadingEntities);
+  const [sortingOptions, setSortingOptions] = useState<
+    [string, "ASC" | "DESC"][]
+  >([]);
 
   useEffect(() => {
+    dispatch(setEntityPerPage(10));
+    dispatch(setEntityPage(0));
+    dispatch(setEntitySearchText(""));
+    dispatch(setEntitySearchOption(""));
+    dispatch(setEntitySort([]));
     dispatch(getAllEntityList(moduleName));
     dispatch(getSchema(moduleName));
   }, [moduleName, dispatch]);
@@ -63,6 +73,12 @@ export function EntityList() {
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setEntitySearchText(value));
+    dispatch(getAllEntityList(moduleName));
+  };
+
+  const handleClickSorting = (sortingValues: [string, "ASC" | "DESC"][]) => {
+    setSortingOptions(sortingValues);
+    dispatch(setEntitySort(sortingValues));
     dispatch(getAllEntityList(moduleName));
   };
 
@@ -100,10 +116,15 @@ export function EntityList() {
     history.push(moduleForm(moduleName));
   };
 
+  const handleClickBack = () => history.push(admin());
+
   return (
     <Fragment>
+      <Box padding=" 24px 18px 0">
+        <BackButton onClick={handleClickBack} />
+      </Box>
       <Box
-        padding="32px 24px 24px 24px"
+        padding="6px 24px 24px 24px"
         display="flex"
         justifyContent="space-between"
         alignItems="center"
@@ -152,7 +173,8 @@ export function EntityList() {
           handleClickEdit,
           handleClickDelete
         )}
-        onClickSort={noop}
+        sortingOptions={sortingOptions}
+        onClickSort={handleClickSorting}
       />
       <TablePagination
         component="div"

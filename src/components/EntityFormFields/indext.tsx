@@ -27,7 +27,9 @@ export function EntityFormFields({
   schema,
   onChangeForm,
 }: EntityFormFieldsProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const handleChangeField = (e: React.ChangeEvent<HTMLInputElement>) => {
     const clonedFormValues = cloneDeep(formValues);
@@ -45,12 +47,16 @@ export function EntityFormFields({
     const clonedFormValues = cloneDeep(formValues);
     clonedFormValues[field] = id;
     onChangeForm(clonedFormValues);
-    setIsModalOpen(false);
+    setIsModalOpen({ ...isModalOpen, [field]: false });
   };
 
-  const handleClickAddIcon = () => setIsModalOpen(true);
+  const handleClickAddIcon = (field: string) => () => {
+    setIsModalOpen({ ...isModalOpen, [field]: true });
+  };
 
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseModal = (field: string) => () => {
+    setIsModalOpen({ ...isModalOpen, [field]: false });
+  };
 
   return (
     <Fragment>
@@ -92,14 +98,14 @@ export function EntityFormFields({
                       <IconButton
                         size="small"
                         aria-label="add"
-                        onClick={handleClickAddIcon}
+                        onClick={handleClickAddIcon(field.fieldName)}
                       >
                         <ManageSearch color="primary" />
                       </IconButton>
                       <EntityModal
-                        isOpen={isModalOpen}
+                        isOpen={isModalOpen[field.fieldName]}
                         modelName={field.references.model}
-                        onClose={handleCloseModal}
+                        onClose={handleCloseModal(field.fieldName)}
                         onSelectOption={handleChangeModal(field.fieldName)}
                       />
                     </Fragment>

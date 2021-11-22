@@ -1,4 +1,5 @@
 import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
+import { BackButton } from "components/BackButton";
 import { LoadingSpinner } from "components/LoadingSpinner/LoadingSpinner";
 import {
   createUser,
@@ -113,12 +114,15 @@ export function UserForm() {
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>) => setPassword(value);
 
+  const handleClickBack = () => history.push(users());
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   return (
     <Box padding="24px">
+      <BackButton aria-label="Edit" onClick={handleClickBack} />
       <Card>
         <Box padding="24px">
           <Box paddingLeft="12px" paddingBottom="32px">

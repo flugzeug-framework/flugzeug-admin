@@ -1,4 +1,5 @@
 import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import { BackButton } from "components/BackButton";
 import { EntityFormFields } from "components/EntityFormFields/indext";
 import {
   createEntity,
@@ -96,8 +97,11 @@ export function EntityForm() {
   const handleChangeForm = (updatedState: { [key: string]: any }) =>
     setFormValues(updatedState);
 
+  const handleClickBack = () => history.push(moduleList(moduleName));
+
   return (
     <Box padding="24px">
+      <BackButton onClick={handleClickBack} />
       <Card>
         <Box padding="24px">
           <Box paddingLeft="12px" paddingBottom="32px">
