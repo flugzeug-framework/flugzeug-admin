@@ -1,5 +1,6 @@
 import { Visibility } from "@mui/icons-material";
 import { Box, IconButton, TablePagination, Typography } from "@mui/material";
+import PageWrapper from "components/PageWrapper";
 import { TableCustom } from "components/table/TableCustom";
 import { getAllModels } from "features/admin/adminActions";
 import {
@@ -15,7 +16,7 @@ import {
   setModelsSort,
 } from "features/admin/adminSlice";
 import { capitalize } from "lodash";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { moduleList } from "routes/Roots";
@@ -101,7 +102,7 @@ export function Admin() {
   };
 
   return (
-    <Fragment>
+    <PageWrapper>
       <Box
         padding="32px 24px 24px 24px"
         display="flex"
@@ -126,6 +127,6 @@ export function Admin() {
         rowsPerPage={entityPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Fragment>
+    </PageWrapper>
   );
 }

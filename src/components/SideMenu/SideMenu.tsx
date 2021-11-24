@@ -1,120 +1,35 @@
-import { Box, List, ListItem, ListItemText, Theme } from "@mui/material";
-import { createStyles, makeStyles } from "@mui/styles";
 import React, { Fragment } from "react";
-import { Link, LinkProps, useLocation } from "react-router-dom";
-import { admin, home, profile, users } from "routes/Roots";
+import { useDispatch, useSelector } from "react-redux";
+import { Box, List, ListItem, SvgIcon, SvgIconTypeMap } from "@mui/material";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
+import CloseIcon from '@mui/icons-material/Close';
+import { selectNavbarState } from "features/admin/adminSelectors";
+import { changeNavbarState } from "features/admin/adminSlice";
+import ListItemLink from "components/ListItemLink";
+import { useStyles } from './style';
 
-enum SideMenuLabels {
-  HOME = "Home",
-  USERS = "Users",
-  PROFILE = "Profile",
-  ADMIN = "Admin",
-}
-
-interface ListItemLinkProps {
-  icon?: React.ReactElement;
+export interface SideMenuLabels {
   label: string;
-  to: string;
+  path: string;
+  icon: OverridableComponent<SvgIconTypeMap<{},"svg">>
+};
+
+interface SideMenuProps {
+  sideMenuLabels: SideMenuLabels[]
 }
 
-const useStyles: any = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "&.Mui-selected": {
-        backgroundImage: `linear-gradient(to right, ${theme.palette.primary.main} 100%, ${theme.palette.secondary.main} 0%)`,
-        color: "white",
-      },
-    },
-    list: {
-      height: "100vh",
-    },
-    listItem: {
-      height: "64px",
-      color: theme.palette.primary.dark,
-    },
-    listItemText: {
-      paddingLeft: "42px",
-      fontWeight: "bold",
-      fontFamily: theme.typography.fontFamily,
-      lineHeight: "1.43",
-      letterSpacing: "0.01071em",
-      fontSize: "1rem",
-      wordWrap: "break-word",
-    },
-    logoContainer: {
-      margin: "0 auto",
-      paddingTop: "24px",
-      width: "111px",
-    },
-    logo: {
-      maxWidth: "100%",
-      height: "auto",
-    },
-    container: {
-      backgroundColor: "#FFFFFF",
-      bottom: "0",
-      boxShadow: "1px 1px 8px #0000001A",
-      left: "0",
-      position: "fixed",
-      top: "0",
-      zIndex: 10,
-      [theme.breakpoints.down("sm")]: {
-        boxShadow: "none",
-      },
-      height: "100%",
-    },
-  })
-);
+export function SideMenu(menuProps: SideMenuProps) {
+  const {
+    sideMenuLabels
+  } = menuProps;
 
-export function SideMenu({ children }: any) {
-  const location = useLocation();
   // const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+  const open = useSelector(selectNavbarState);
   const classes = useStyles();
-  const labels = [...Object.values(SideMenuLabels)];
+  const labels = [...sideMenuLabels];
 
-  const getPath = (label: string) => {
-    switch (label) {
-      case SideMenuLabels.HOME:
-        return home();
-      case SideMenuLabels.USERS:
-        return users();
-      case SideMenuLabels.PROFILE:
-        return profile();
-      case SideMenuLabels.ADMIN:
-        return admin();
-      default:
-        return home();
-    }
-  };
-
-  const ListItemLink = (props: ListItemLinkProps) => {
-    const { label, to } = props;
-    const isSelected = location.pathname.split("/")[1] === to.split("/")[1];
-
-    const renderLink = React.useMemo(
-      () =>
-        React.forwardRef<any, Omit<LinkProps, "to">>((itemProps, ref) => (
-          <Link to={to} ref={ref} {...itemProps} />
-        )),
-      [to]
-    );
-
-    return (
-      <ListItem
-        className={classes.listItem}
-        classes={{ selected: classes.root }}
-        button
-        component={renderLink}
-        selected={isSelected}
-      >
-        <ListItemText
-          disableTypography
-          className={classes.listItemText}
-          primary={label}
-        />
-      </ListItem>
-    );
-  };
+  const switchOpen = () => dispatch(changeNavbarState());
 
   return (
     <Fragment>
@@ -123,18 +38,29 @@ export function SideMenu({ children }: any) {
           <div className={classes.logoContainer}>
             <img className={classes.logo} alt="logo" src="/logo.svg" />
           </div>
-          {labels.map((label) => (
-            <ListItemLink to={getPath(label)} key={label} label={label} />
+          {labels.map(({label, path, icon}) => (
+            <ListItemLink to={path} key={label} label={label} icon={icon} />
           ))}
         </List>
       </Box>
-      <Box
-        className={classes.content}
-        minHeight={`calc(100vh - 64px})`}
-        paddingLeft="232px"
-        width="100%"
-      >
-        {children}
+      <Box className={`${classes.smallContent} ${!open && classes.hidden}`}>
+        <Box className={`${classes.smallContainer} ${open && classes.slideInDisplay}`} width="232px">
+          <List className={classes.list}>
+            <div className={classes.logoContainer}>
+              <img className={classes.logo} alt="logo" src="/logo.svg" />
+            </div>
+            <ListItem className={classes.centerItem} onClick={switchOpen}>
+              <SvgIcon component={CloseIcon} />
+            </ListItem>
+            {labels.map(({label, path, icon}) => (
+              <ListItemLink to={path} key={label} label={label} icon={icon} />
+            ))}
+          </List>
+        </Box>
+        <Box 
+          className={`${classes.backContainer} ${open && classes.fadeDisplay}`}
+          onClick={switchOpen}
+        ></Box>
       </Box>
     </Fragment>
   );

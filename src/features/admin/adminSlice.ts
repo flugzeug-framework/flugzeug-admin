@@ -9,6 +9,7 @@ interface AdminState {
   page: number;
   sort: [string, "ASC" | "DESC"][];
   selectedModel: string | null;
+  openNavbar: boolean;
 }
 
 const initialState: AdminState = {
@@ -20,6 +21,7 @@ const initialState: AdminState = {
   page: 1,
   sort: [],
   selectedModel: null,
+  openNavbar: false,
 };
 
 export const adminSlice = createSlice({
@@ -54,6 +56,9 @@ export const adminSlice = createSlice({
     setSelectedModel: (state, action: PayloadAction<string | null>) => {
       state.selectedModel = action.payload;
     },
+    changeNavbarState: (state) => {
+      state.openNavbar = !state.openNavbar
+    }
   },
 });
 
@@ -66,6 +71,7 @@ export const {
   setModelsPage,
   setModelsSort,
   setSelectedModel,
+  changeNavbarState,
 } = adminSlice.actions;
 
 export const adminReducer = adminSlice.reducer;

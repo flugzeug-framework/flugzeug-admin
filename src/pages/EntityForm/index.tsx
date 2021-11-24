@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { BackButton } from "components/BackButton";
 import { EntityFormFields } from "components/EntityFormFields";
 import {
@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { moduleList } from "routes/Roots";
 import { getAtributes } from "utils/entityUtils";
+import PageWrapper from "components/PageWrapper";
 
 export function EntityForm() {
   let { moduleName, id } = useParams<{
@@ -100,35 +101,33 @@ export function EntityForm() {
   const handleClickBack = () => history.push(moduleList(moduleName));
 
   return (
-    <Box padding="24px">
+    <PageWrapper>
       <BackButton onClick={handleClickBack} />
-      <Card>
-        <Box padding="24px">
-          <Box paddingLeft="12px" paddingBottom="32px">
-            <Typography variant="h4">
-              {isEditMode() ? "Edit" : "Create"}
-            </Typography>
-          </Box>
-          <form onSubmit={handleSubmit}>
-            <Grid container rowSpacing={2} direction="column">
-              {!isLoading ? (
-                <EntityFormFields
-                  formValues={formValues}
-                  schema={schema}
-                  onChangeForm={handleChangeForm}
-                />
-              ) : (
-                <Typography>Loading...</Typography>
-              )}
-              <Grid item>
-                <Button type="submit" variant="contained">
-                  {isEditMode() ? "Save" : "Create"}
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+      <Box padding="24px">
+        <Box paddingLeft="12px" paddingBottom="32px">
+          <Typography variant="h4">
+            {isEditMode() ? "Edit" : "Create"}
+          </Typography>
         </Box>
-      </Card>
-    </Box>
+        <form onSubmit={handleSubmit}>
+          <Grid container rowSpacing={2} direction="column">
+            {!isLoading ? (
+              <EntityFormFields
+                formValues={formValues}
+                schema={schema}
+                onChangeForm={handleChangeForm}
+              />
+            ) : (
+              <Typography>Loading...</Typography>
+            )}
+            <Grid item>
+              <Button type="submit" variant="contained">
+                {isEditMode() ? "Save" : "Create"}
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
+    </PageWrapper>
   );
 }

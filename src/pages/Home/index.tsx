@@ -1,16 +1,15 @@
-import { Box, Card, Typography } from "@mui/material";
 import React from "react";
+import { Box, Typography } from "@mui/material";
+import PageWrapper from "components/PageWrapper";
 
 export function Home() {
   return (
-    <Box padding="24px">
-      <Card>
-        <Box padding="24px">
-          <Box paddingLeft="12px" paddingBottom="32px">
-            <Typography variant="h4">Home</Typography>
-          </Box>
+    <PageWrapper>
+      <Box padding="24px">
+        <Box paddingLeft="12px" paddingBottom="32px">
+          <Typography variant="h4">Home</Typography>
         </Box>
-      </Card>
-    </Box>
+      </Box>
+    </PageWrapper>
   );
 }

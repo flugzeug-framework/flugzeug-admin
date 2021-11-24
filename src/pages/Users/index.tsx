@@ -22,11 +22,12 @@ import {
   setUsersSort,
 } from "features/userManagement/userManagementSlice";
 import { UserModel } from "models/userModel";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { user } from "routes/Roots";
 import { MainTableCell, MainTableColumn, MainTableRow } from "utils/tableUtils";
+import PageWrapper from "components/PageWrapper";
 
 export const mainTableHeaderColumns: MainTableColumn[] = [
   {
@@ -146,7 +147,7 @@ export function Users() {
     });
 
   return (
-    <Fragment>
+    <PageWrapper>
       <Box
         padding="32px 24px 24px 24px"
         display="flex"
@@ -183,6 +184,6 @@ export function Users() {
         rowsPerPage={userPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Fragment>
+    </PageWrapper>
   );
 }
