@@ -41,20 +41,29 @@ export function EntityModal({
         height="100vh"
       >
         <Card>
-          <Box display="flex" justifyContent="flex-end" padding="8px 16px 0 0">
-            <IconButton aria-label="Close" onClick={handleClose}>
-              <Close color="primary" />
-            </IconButton>
+          <Box maxHeight="100vh" overflow="scroll">
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              padding="8px 16px 0 0"
+            >
+              <IconButton aria-label="Close" onClick={handleClose}>
+                <Close color="primary" />
+              </IconButton>
+            </Box>
+            {isTable ? (
+              <EntityModalTable
+                moduleName={modelName}
+                onClicKOption={onSelectOption}
+                onClickCreate={handleChangeToForm}
+              />
+            ) : (
+              <EntityModalForm
+                module={modelName}
+                onCreate={handleCreateEntity}
+              />
+            )}
           </Box>
-          {isTable ? (
-            <EntityModalTable
-              moduleName={modelName}
-              onClicKOption={onSelectOption}
-              onClickCreate={handleChangeToForm}
-            />
-          ) : (
-            <EntityModalForm module={modelName} onCreate={handleCreateEntity} />
-          )}
         </Card>
       </Box>
     </Modal>
