@@ -10,7 +10,7 @@ export interface ListItemLinkProps {
   to: string;
 }
 
-const ListItemLink = (props: ListItemLinkProps) => {
+function ListItemLink (props: ListItemLinkProps) {
   const { icon, label, to } = props;
 
   const classes = useStyles();

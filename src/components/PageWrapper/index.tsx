@@ -16,7 +16,7 @@ interface PageWrapperProps {
   color?: ColorPageWrapper
 }
 
-const PageWrapper = (props: PageWrapperProps) => {
+function PageWrapper (props: PageWrapperProps) {
   const {
     children,
     color = ColorPageWrapper.DEFAULT

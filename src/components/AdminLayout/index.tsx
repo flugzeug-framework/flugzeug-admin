@@ -20,7 +20,7 @@ const MenuLabels: SideMenuLabels[] = [
   { label: "ADMIN", path: admin(), icon: AdminIcon },
 ]
 
-const CustomLayout: React.FC<CustomLayoutProps> = ({children}) => {
+function CustomLayout ({children}:CustomLayoutProps) {
   return (
     <div className={styles.adminLayout}>
       <SideMenu sideMenuLabels={MenuLabels} />

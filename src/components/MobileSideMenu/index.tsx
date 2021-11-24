@@ -8,7 +8,7 @@ import ListItemLink from "components/ListItemLink";
 import { SideMenuProps } from 'components/SideMenu/SideMenu';
 import styles from './style.module.css';
 
-const MobileSideMenu = (props: SideMenuProps) => {
+function MobileSideMenu (props: SideMenuProps) {
   const {
     sideMenuLabels
   } = props;
