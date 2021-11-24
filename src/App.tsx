@@ -1,4 +1,4 @@
-import { SideMenu } from "components/SideMenu/SideMenu";
+import React, { Fragment, useEffect } from "react";
 import { initSession } from "features/session/sessionActions";
 import {
   selectIsSessionConfirmed,
@@ -17,7 +17,6 @@ import { Register } from "pages/Register";
 import { ResetPassword } from "pages/ResetPassword";
 import { UserForm } from "pages/UserForm";
 import { Users } from "pages/Users";
-import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { ProtectedRoute } from "routes/ProtectedRoute";
@@ -35,6 +34,7 @@ import {
   user,
   users,
 } from "routes/Roots";
+import AdminLayout from "components/AdminLayout";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,7 +68,7 @@ function App() {
             exact={true}
           />
           <Route component={Register} path={register()} exact={true} />
-          <SideMenu>
+          <AdminLayout>
             <ProtectedRoute component={Home} exact path={home()} />
             <ProtectedRoute component={UserForm} path={user(":id")} />
             <ProtectedRoute component={Users} exact path={users()} />
@@ -84,7 +84,7 @@ function App() {
               exact
               path={moduleForm(":moduleName", ":id")}
             />
-          </SideMenu>
+          </AdminLayout>
         </Switch>
       )}
       <Toast />

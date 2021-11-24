@@ -36,11 +36,12 @@ import {
   setEntitySort,
 } from "features/entity/entitySlice";
 import { capitalize } from "lodash";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { admin, moduleForm } from "routes/Roots";
 import { getAttributes, getMainHeaders, getMainRows } from "utils/entityUtils";
+import PageWrapper from "components/PageWrapper";
 
 export function EntityList() {
   let { moduleName } = useParams<{ moduleName: string }>();
@@ -119,7 +120,7 @@ export function EntityList() {
   const handleClickBack = () => history.push(admin());
 
   return (
-    <Fragment>
+    <PageWrapper>
       <Box padding=" 24px 18px 0">
         <BackButton onClick={handleClickBack} />
       </Box>
@@ -185,6 +186,6 @@ export function EntityList() {
         rowsPerPage={entityPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Fragment>
+    </PageWrapper>
   );
 }

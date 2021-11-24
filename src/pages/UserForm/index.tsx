@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { BackButton } from "components/BackButton";
 import { LoadingSpinner } from "components/LoadingSpinner/LoadingSpinner";
 import {
@@ -17,6 +17,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { users } from "routes/Roots";
+import PageWrapper from "components/PageWrapper";
 
 export function UserForm() {
   const history = useHistory();
@@ -121,75 +122,73 @@ export function UserForm() {
   }
 
   return (
-    <Box padding="24px">
+    <PageWrapper>
       <BackButton aria-label="Edit" onClick={handleClickBack} />
-      <Card>
-        <Box padding="24px">
-          <Box paddingLeft="12px" paddingBottom="32px">
-            <Typography variant="h4">
-              {isEditMode() ? "Edit" : "Create"}
-            </Typography>
-          </Box>
-          <form onSubmit={handleSubmit}>
-            <Grid container rowSpacing={2} direction="column">
-              <Grid item width="25%">
-                <TextField
-                  size="small"
-                  label="Name"
-                  placeholder="John"
-                  type="text"
-                  name="name"
-                  required
-                  value={firstName}
-                  onChange={handleFirstNameChange}
-                />
-              </Grid>
-              <Grid item width="25%">
-                <TextField
-                  size="small"
-                  label="Last Name"
-                  placeholder="Doe"
-                  type="text"
-                  name="lastName"
-                  required
-                  value={lastName}
-                  onChange={handleLastNameChange}
-                />
-              </Grid>
-              {!isEditMode() && authType === AuthType.Email && (
-                <Grid item width="25%">
-                  <TextField
-                    size="small"
-                    label="Password"
-                    type="text"
-                    name="password"
-                    required
-                    value={password}
-                    onChange={handlePasswordChange}
-                  />
-                </Grid>
-              )}
-              <Grid item width="25%">
-                <TextField
-                  size="small"
-                  label="Email"
-                  placeholder="john.doe@example.com"
-                  type="email"
-                  name="email"
-                  required
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-              </Grid>
-              <Grid item>
-                <Button type="submit" variant="contained">
-                  {isEditMode() ? "Save details" : "Create a User"}
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+      <Box padding="24px">
+        <Box paddingLeft="12px" paddingBottom="32px">
+          <Typography variant="h4">
+            {isEditMode() ? "Edit" : "Create"}
+          </Typography>
         </Box>
-      </Card>
-    </Box>
+        <form onSubmit={handleSubmit}>
+          <Grid container rowSpacing={2} direction="column">
+            <Grid item width="25%">
+              <TextField
+                size="small"
+                label="Name"
+                placeholder="John"
+                type="text"
+                name="name"
+                required
+                value={firstName}
+                onChange={handleFirstNameChange}
+              />
+            </Grid>
+            <Grid item width="25%">
+              <TextField
+                size="small"
+                label="Last Name"
+                placeholder="Doe"
+                type="text"
+                name="lastName"
+                required
+                value={lastName}
+                onChange={handleLastNameChange}
+              />
+            </Grid>
+            {!isEditMode() && authType === AuthType.Email && (
+              <Grid item width="25%">
+                <TextField
+                  size="small"
+                  label="Password"
+                  type="text"
+                  name="password"
+                  required
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+              </Grid>
+            )}
+            <Grid item width="25%">
+              <TextField
+                size="small"
+                label="Email"
+                placeholder="john.doe@example.com"
+                type="email"
+                name="email"
+                required
+                value={email}
+                onChange={handleEmailChange}
+              />
+            </Grid>
+            <Grid item>
+              <Button type="submit" variant="contained">
+                {isEditMode() ? "Save details" : "Create a User"}
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
+    </PageWrapper>
   );
 }

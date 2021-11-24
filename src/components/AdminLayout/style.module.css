@@ -1,0 +1,26 @@
+.adminLayout {
+  background-color: #F6F6F6;
+  background-color: #ccd4de;
+  min-height: 100%;
+  width: 100%;
+  position: absolute;
+  padding: 30px 30px;
+}
+
+.adminLayoutContent {
+  min-height: calc(100vh - 64px);
+  padding-left: calc(232px + 20px);
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .adminLayout {
+    padding: 10px 10px;
+  }
+
+  .adminLayoutContent {
+    min-height: 0;
+    padding: 0;
+    width: 100%;
+  }
+}

@@ -11,5 +11,5 @@ export const selectModelsPerPage = (state: RootState) =>
   state.admin.itemsPerPage;
 export const selectModelsPage = (state: RootState) => state.admin.page;
 export const selectModelsSort = (state: RootState) => state.admin.sort;
-export const selectSelectedModel = (state: RootState) =>
-  state.admin.selectedModel;
+export const selectSelectedModel = (state: RootState) => state.admin.selectedModel;
+export const selectNavbarState = (state: RootState) => state.admin.openNavbar;
