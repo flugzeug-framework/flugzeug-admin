@@ -7,6 +7,7 @@ import AdminIcon from '@mui/icons-material/AdminPanelSettings';
 import { SideMenu, SideMenuLabels } from 'components/SideMenu/SideMenu';
 import { admin, home, profile, users } from "routes/Roots";
 import styles from './style.module.css';
+import MobileSideMenu from 'components/MobileSideMenu';
 
 interface CustomLayoutProps {
   children: React.ReactNode
@@ -23,6 +24,7 @@ const CustomLayout: React.FC<CustomLayoutProps> = ({children}) => {
   return (
     <div className={styles.adminLayout}>
       <SideMenu sideMenuLabels={MenuLabels} />
+      <MobileSideMenu sideMenuLabels={MenuLabels} />
       <Box className={styles.adminLayoutContent}>
         {children}
       </Box>
